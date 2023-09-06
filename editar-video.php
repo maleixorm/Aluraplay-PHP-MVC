@@ -3,10 +3,18 @@
 $pdo = new PDO('mysql:host=localhost;dbname=phpmvc', 'php', '123456');
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+if ($id === false || $id === null) {
+    header("Location: /?sucesso=0");
+    exit();
+}
 $url = filter_input(INPUT_POST, 'url', FILTER_VALIDATE_URL);
+if ($url === false) {
+    header("Location: /?sucesso=0");
+    exit();
+}
 $title = filter_input(INPUT_POST, 'title');
-if ($id === false || $url === false || $title === false) {
-    header("Location: ./index.php?sucesso=0");
+if ($title === false) {
+    header("Location: /?sucesso=0");
     exit();
 }
 
@@ -17,7 +25,9 @@ $statement->bindValue(':url', $url);
 $statement->bindValue(':title', $title);
 
 if ($statement->execute() === false) {
-    header("Location: ./index.php?sucesso=0");
+    header("Location: /?sucesso=0");
+    exit();
 } else {
-    header("Location: ./index.php?sucesso=1");
+    header("Location: /?sucesso=1");
+    exit();
 }
