@@ -1,10 +1,17 @@
 <?php
 
+use Alura\Mvc\Controller\VideoListController;
+use Alura\Mvc\Repository\VideoRepository;
+
 require_once __DIR__ . "/../vendor/autoload.php";
+
+$pdo = new PDO('mysql:host=localhost;dbname=phpmvc', 'php', '123456');
+$videoRepository = new VideoRepository($pdo);
 
 if (!array_key_exists('PATH_INFO', $_SERVER) || $_SERVER['PATH_INFO'] === '/') 
 {
-    require_once __DIR__ . '/../listagem-videos.php';
+    $controller = new VideoListController($videoRepository);
+    $controller->processaRequisicao();
 } 
 elseif ($_SERVER['PATH_INFO'] === '/novo-video') 
 {
