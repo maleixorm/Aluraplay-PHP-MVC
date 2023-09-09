@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+require_once __DIR__ . "/../vendor/autoload.php";
 
 if (!array_key_exists('PATH_INFO', $_SERVER) || $_SERVER['PATH_INFO'] === '/') 
 {

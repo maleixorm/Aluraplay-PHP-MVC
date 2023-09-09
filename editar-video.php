@@ -1,5 +1,8 @@
 <?php
 
+use Alura\Mvc\Entity\Video;
+use Alura\Mvc\Repository\VideoRepository;
+
 $pdo = new PDO('mysql:host=localhost;dbname=phpmvc', 'php', '123456');
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -18,13 +21,12 @@ if ($title === false) {
     exit();
 }
 
-$sql = "UPDATE videos SET url = :url, title = :title WHERE id = :id;";
-$statement = $pdo->prepare($sql);
-$statement->bindValue(':id', $id, PDO::PARAM_INT);
-$statement->bindValue(':url', $url);
-$statement->bindValue(':title', $title);
+$video = new Video($url, $title);
+$video->setId($id);
 
-if ($statement->execute() === false) {
+$repository = new VideoRepository($pdo);
+
+if ($repository->update(new Video($url, $title)) === false)  {
     header("Location: /?sucesso=0");
     exit();
 } else {
