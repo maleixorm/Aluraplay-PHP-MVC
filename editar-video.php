@@ -26,7 +26,7 @@ $video->setId($id);
 
 $repository = new VideoRepository($pdo);
 
-if ($repository->update(new Video($url, $title)) === false)  {
+if ($repository->update($video) === false)  {
     header("Location: /?sucesso=0");
     exit();
 } else {
