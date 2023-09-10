@@ -13,7 +13,7 @@ class VideoListController
     public function processaRequisicao(): void
     {
         $videoList = $this->videoRepository->all();
-        require_once __DIR__ . '/../../inicio-html.php'; 
+        require_once __DIR__ . '../../../inicio-html.php'; 
         ?>
             <ul class="videos__container" alt="videos alura">
                 <?php foreach ($videoList as $video): ?>
@@ -35,6 +35,6 @@ class VideoListController
                     <?php endif; ?>
                 <?php endforeach; ?>
             </ul>
-        <?php require_once __DIR__ . '/../../fim-html.php';
+        <?php require_once __DIR__ . '../../../fim-html.php';
     }
 }
