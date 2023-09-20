@@ -1,13 +1,16 @@
 <?php
 
 namespace Alura\Mvc\Controller;
+
 use PDO;
 
 class LoginController implements Controller
 {
-    public function __construct(private PDO $pdo)
+    private PDO $pdo;
+
+    public function __construct()
     {
-    
+        $this->pdo = new PDO('mysql:host=localhost;dbname=phpmvc', 'php', '123456');
     }
 
     public function processaRequisicao(): void
@@ -15,7 +18,7 @@ class LoginController implements Controller
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $passwd = filter_input(INPUT_POST, 'passwd');
 
-        $sql = 'SELECT * FROM users WHERE email = ?';
+        $sql = "SELECT * FROM users WHERE email = ?;";
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(1, $email);
         $statement->execute();
@@ -24,6 +27,8 @@ class LoginController implements Controller
         $correctPasswd = password_verify($passwd, $userData['passwd'] ?? '');
 
         if ($correctPasswd) {
+            session_start();
+            $_SESSION['logado'] = true;
             header('Location: /');
         } else {
             header('Location: /login?sucesso=0');

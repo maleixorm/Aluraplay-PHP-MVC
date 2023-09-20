@@ -1,6 +1,15 @@
 <?php
 
-use Alura\Mvc\Controller\{Controller, VideoListController, VideoFormController, NewVideoController, Error404Controller, EditVideoController, DeleteVideoController};
+use Alura\Mvc\Controller\{
+    Controller, 
+    VideoListController, 
+    VideoFormController, 
+    NewVideoController, 
+    Error404Controller, 
+    EditVideoController, 
+    DeleteVideoController, 
+    LoginController, 
+    LoginFormController};
 use Alura\Mvc\Repository\VideoRepository;
 
 require_once __DIR__ . "/../vendor/autoload.php";
