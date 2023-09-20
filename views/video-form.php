@@ -30,7 +30,6 @@ require_once __DIR__ . '/inicio-html.php';
                         accept="image/*"
                         type="file"
                         class="campo__escrita" 
-                        required 
                         id='image' />
                 </div>
                 <input class="formulario__botao" type="submit" value="Enviar" />
