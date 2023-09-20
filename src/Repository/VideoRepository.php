@@ -37,6 +37,15 @@ class VideoRepository
         return $statement->execute();
     }
 
+    public function removeCapa(int $id): bool
+    {
+        $sql = "UPDATE videos SET image_path = null WHERE id = ?";
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindValue(1, $id);
+        
+        return $statement->execute();
+    }
+
     public function update(Video $video): bool
     {
         $updateImageSql = '';
