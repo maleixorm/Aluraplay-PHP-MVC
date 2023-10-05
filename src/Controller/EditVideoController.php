@@ -16,17 +16,20 @@ class EditVideoController implements Controller
     {
         $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
             if ($id === false || $id === null) {
-                header("Location: /?sucesso=0");
+                $_SESSION['error_message'] = 'ID inválido!';
+                header("Location: /");
                 return;
             }
         $url = filter_input(INPUT_POST, 'url', FILTER_VALIDATE_URL);
             if ($url === false) {
-                header("Location: /?sucesso=0");
+                $_SESSION['error_message'] = 'URL inválido!';
+                header("Location: /");
                 return;
             }
         $title = filter_input(INPUT_POST, 'title');
             if ($title === false) {
-                header("Location: /?sucesso=0");
+                $_SESSION['error_message'] = 'Título inválido!';
+                header("Location: /");
                 return;
             }
 
@@ -49,7 +52,8 @@ class EditVideoController implements Controller
         $success = $this->videoRepository->update($video);
 
         if ($success === false)  {
-            header("Location: /?sucesso=0");
+            $_SESSION['error_message'] = 'Erro ao tentar atualizar o vídeo!';
+            header("Location: /");
             return;
         } else {
             header("Location: /?sucesso=1");

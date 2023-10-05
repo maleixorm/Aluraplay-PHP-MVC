@@ -14,14 +14,16 @@ class RemoveCapaController implements Controller
     {
         $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
             if ($id === false || $id === null) {
-                header("Location: /?sucesso=0");
+                $_SESSION['error_message'] = 'ID não encontrado!';
+                header("Location: /");
                 return;
             }
         
         $success = $this->videoRepository->removeCapa($id);
 
         if ($success === false)  {
-            header("Location: /?sucesso=0");
+            $_SESSION['error_message'] = 'Erro ao tentar remover uma capa!';
+            header("Location: /");
             return;
         } else {
             header("Location: /?sucesso=1");

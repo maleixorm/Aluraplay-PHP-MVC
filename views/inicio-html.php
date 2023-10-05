@@ -30,3 +30,10 @@
         </nav>
 
     </header>
+
+    <?php if (isset($_SESSION['error_message'])): ?>
+    <h2 class="mensagem__erro">
+        <?= $_SESSION['error_message']; ?>
+        <?php unset($_SESSION['error_message']); ?> 
+    </h2>
+    <?php endif; ?>
