@@ -3,11 +3,13 @@
 namespace Alura\Mvc\Controller;
 
 use Alura\Mvc\Entity\Video;
+use Alura\Mvc\Helper\FlashMessageTrait;
 use Alura\Mvc\Repository\VideoRepository;
 use finfo;
 
 class NewVideoController implements Controller
 {
+    use FlashMessageTrait;
     public function __construct(private VideoRepository $videoRepository) {
         
     }
@@ -15,10 +17,16 @@ class NewVideoController implements Controller
     public function processaRequisicao(): void
     {
         $url = filter_input(INPUT_POST, 'url', FILTER_VALIDATE_URL);
+        if ($url === false) {
+            $this->addErrorMessage('URL inválida!');
+            header("Location: /novo-video");
+            return;
+        }
+
         $title = filter_input(INPUT_POST, 'title');
-        if ($url === false || $title === false) {
-            $_SESSION['error_message'] = 'URL inválida ou título vazio!';
-            header("Location: /");
+        if ($title === false) {
+            $this->addErrorMessage('Título não informado!');
+            header("Location: /novo-video");
             return;
         }
 

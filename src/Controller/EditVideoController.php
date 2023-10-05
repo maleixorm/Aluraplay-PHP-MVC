@@ -3,11 +3,13 @@
 namespace Alura\Mvc\Controller;
 
 use Alura\Mvc\Entity\Video;
+use Alura\Mvc\Helper\FlashMessageTrait;
 use Alura\Mvc\Repository\VideoRepository;
 use finfo;
 
 class EditVideoController implements Controller
 {
+    use FlashMessageTrait;
     public function __construct(private VideoRepository $videoRepository) {
         
     }
@@ -16,19 +18,19 @@ class EditVideoController implements Controller
     {
         $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
             if ($id === false || $id === null) {
-                $_SESSION['error_message'] = 'ID inválido!';
+                $this->addErrorMessage('ID inválido!');
                 header("Location: /");
                 return;
             }
         $url = filter_input(INPUT_POST, 'url', FILTER_VALIDATE_URL);
             if ($url === false) {
-                $_SESSION['error_message'] = 'URL inválido!';
+                $this->addErrorMessage('URL inválido!');
                 header("Location: /");
                 return;
             }
         $title = filter_input(INPUT_POST, 'title');
             if ($title === false) {
-                $_SESSION['error_message'] = 'Título inválido!';
+                $this->addErrorMessage('Título inválido!');
                 header("Location: /");
                 return;
             }
@@ -52,7 +54,7 @@ class EditVideoController implements Controller
         $success = $this->videoRepository->update($video);
 
         if ($success === false)  {
-            $_SESSION['error_message'] = 'Erro ao tentar atualizar o vídeo!';
+            $this->addErrorMessage('Erro ao tentar atualizar o vídeo!');
             header("Location: /");
             return;
         } else {
