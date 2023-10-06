@@ -37,4 +37,4 @@ if (array_key_exists($key, $routes)) {
 }
 
 /** @var Controller $controller */
-$controller->processaRequisicao();
+$controller->processaRequisicao($request);
