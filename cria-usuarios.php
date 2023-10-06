@@ -13,8 +13,8 @@ $statement->bindValue(2, $hash);
 $statement->execute();
 
 if (password_needs_rehash($userData['password'], PASSWORD_ARGON2ID)) {
-    $statement = $this->pdo->prepare('UPDATE users SET password = ? WHERE id = ?');
-    $statement->bindValue(1, password_hash($password, PASSWORD_ARGON2ID));
+    $statement = $this->pdo->prepare('UPDATE users SET passwd = ? WHERE id = ?');
+    $statement->bindValue(1, password_hash($passwd, PASSWORD_ARGON2ID));
     $statement->bindValue(2, $userData['id']);
     $statement->execute();
 }

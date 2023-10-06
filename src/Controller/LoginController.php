@@ -4,6 +4,9 @@ namespace Alura\Mvc\Controller;
 
 use Alura\Mvc\Helper\FlashMessageTrait;
 use PDO;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Nyholm\Psr7\Response;
 
 class LoginController implements Controller
 {
@@ -15,10 +18,11 @@ class LoginController implements Controller
         $this->pdo = new PDO('mysql:host=localhost;dbname=phpmvc', 'php', '123456');
     }
 
-    public function processaRequisicao(): void
+    public function processaRequisicao(ServerRequestInterface $request): ResponseInterface
     {
-        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $passwd = filter_input(INPUT_POST, 'passwd');
+        $queryParams = $request->getQueryParams();
+        $email = filter_var($queryParams['email'], FILTER_VALIDATE_EMAIL);
+        $passwd = filter_var($queryParams['passwd']);
 
         $sql = "SELECT * FROM users WHERE email = ?;";
         $statement = $this->pdo->prepare($sql);
@@ -28,12 +32,23 @@ class LoginController implements Controller
         $userData = $statement->fetch(PDO::FETCH_ASSOC);
         $correctPasswd = password_verify($passwd, $userData['passwd'] ?? '');
 
-        if ($correctPasswd) {
-            $_SESSION['logado'] = true;
-            header('Location: /');
-        } else {
+        if (!$correctPasswd) {
             $this->addErrorMessage('Usuário ou senha inválidos!');
-            header('Location: /login');
+            return new Response(302, [
+                'Location' => '/login'
+            ]);
+        } 
+        
+        if (password_needs_rehash($userData['passwd'], PASSWORD_ARGON2ID)) {
+            $statement = $this->pdo->prepare('UPDATE users SET passwd = ? WHERE id = ?');
+            $statement->bindValue(1, password_hash($passwd, PASSWORD_ARGON2ID));
+            $statement->bindValue(2, $userData['id']);
+            $statement->execute();
         }
+
+        $_SESSION['logado'] = true;
+        return new Response(302, [
+            'Location' => '/'
+        ]);
     }
 }
