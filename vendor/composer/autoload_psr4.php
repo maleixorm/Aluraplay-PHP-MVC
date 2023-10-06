@@ -7,6 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-factory/src', $vendorDir . '/psr/http-message/src'),
-    'Nyholm\\Psr7\\' => array($vendorDir . '/nyholm/psr7/src'),
     'Alura\\Mvc\\' => array($baseDir . '/src'),
 );
