@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '093042fd5658789cf34b54c8fc72dce8dc20c45a',
+        'reference' => '22721582a32007bd070e8ac65a289e141f09238c',
         'name' => '__root__',
         'dev' => true,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '093042fd5658789cf34b54c8fc72dce8dc20c45a',
+            'reference' => '22721582a32007bd070e8ac65a289e141f09238c',
             'dev_requirement' => false,
         ),
         'nyholm/psr7' => array(
