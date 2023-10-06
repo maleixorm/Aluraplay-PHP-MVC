@@ -18,8 +18,7 @@ class LoginController implements RequestHandlerInterface
 
     public function __construct()
     {
-        $dbPath = __DIR__ . '/../../banco.sqlite';
-        $this->pdo = new \PDO("sqlite:$dbPath");
+        $this->pdo = new \PDO('mysql:host=localhost;dbname=phpmvc', 'php', '123456');
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
