@@ -45,10 +45,3 @@
     border-radius: 24px;
     background-color: var(--azul-escuro);
 }
-
-.mensagem__erro {
-    margin-top: 1em;
-    color: var(--vermelho-escuro);
-    font-weight: bold;
-    font-size: 21px;
-}

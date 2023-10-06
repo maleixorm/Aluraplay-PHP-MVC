@@ -1,8 +1,8 @@
 <?php
 
-namespace Alura\Mvc\Entity;
+declare(strict_types=1);
 
-use InvalidArgumentException;
+namespace Alura\Mvc\Entity;
 
 class Video
 {
@@ -11,19 +11,19 @@ class Video
     private ?string $filePath = null;
 
     public function __construct(
-        string $url, 
-        public readonly string $title
+        string $url,
+        public readonly string $title,
     ) {
         $this->setUrl($url);
     }
 
-    public function setUrl(string $url)
+    private function setUrl(string $url)
     {
-       if (filter_var($url, FILTER_VALIDATE_URL) === false) {
-        throw new InvalidArgumentException();
-       };
+        if (filter_var($url, FILTER_VALIDATE_URL) === false) {
+            throw new \InvalidArgumentException();
+        }
 
-       $this->url = $url;
+        $this->url = $url;
     }
 
     public function setId(int $id): void

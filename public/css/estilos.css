@@ -6,7 +6,6 @@
     --azul-claro: #E5F1FF;
     --cinza-texto: #444444;
     --cinza-claro: #ECECEC;
-    --vermelho-escuro: #9b0000;
     box-sizing: border-box;
 }
 
@@ -113,4 +112,9 @@ body > header {
         height: 100vh;
     }
 
+}
+
+.formulario__titulo.erro {
+    color: red;
+    margin-top: 1rem;
 }

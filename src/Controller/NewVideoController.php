@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Alura\Mvc\Controller;
 
 use Alura\Mvc\Entity\Video;
@@ -8,39 +10,41 @@ use Alura\Mvc\Repository\VideoRepository;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use finfo;
+use Psr\Http\Message\UploadedFileInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class NewVideoController implements Controller
+class NewVideoController implements RequestHandlerInterface
 {
     use FlashMessageTrait;
-    public function __construct(private VideoRepository $videoRepository) {
-        
+
+    public function __construct(private VideoRepository $videoRepository)
+    {
     }
 
-    public function processaRequisicao(ServerRequestInterface $request): ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $requestBody = $request->getParsedBody();
         $url = filter_var($requestBody['url'], FILTER_VALIDATE_URL);
         if ($url === false) {
-            $this->addErrorMessage('URL inválida!');
+            $this->addErrorMessage('URL inválida');
             return new Response(302, [
                 'Location' => '/'
             ]);
         }
-        $title = filter_var($requestBody['title']);
-        if ($title === false) {
-            $this->addErrorMessage('Título não informado!');
+        $titulo = filter_var($requestBody['titulo']);
+        if ($titulo === false) {
+            $this->addErrorMessage('Título não informado');
             return new Response(302, [
                 'Location' => '/'
             ]);
         }
 
-        $video = new Video($url, $title);
+        $video = new Video($url, $titulo);
         $files = $request->getUploadedFiles();
         /** @var UploadedFileInterface $uploadedImage */
         $uploadedImage = $files['image'];
         if ($uploadedImage->getError() === UPLOAD_ERR_OK) {
-            $finfo = new finfo(FILEINFO_MIME_TYPE);
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
             $tmpFile = $uploadedImage->getStream()->getMetadata('uri');
             $mimeType = $finfo->file($tmpFile);
 

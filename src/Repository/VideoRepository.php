@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Alura\Mvc\Repository;
 
 use Alura\Mvc\Entity\Video;
@@ -9,12 +11,11 @@ class VideoRepository
 {
     public function __construct(private PDO $pdo)
     {
-        
     }
 
     public function add(Video $video): bool
     {
-        $sql = "INSERT INTO videos (url, title, image_path) VALUES (?, ?, ?)";
+        $sql = 'INSERT INTO videos (url, title, image_path) VALUES (?, ?, ?)';
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(1, $video->url);
         $statement->bindValue(2, $video->title);
@@ -30,19 +31,10 @@ class VideoRepository
 
     public function remove(int $id): bool
     {
-        $sql = "DELETE FROM videos WHERE id = ?";
+        $sql = 'DELETE FROM videos WHERE id = ?';
         $statement = $this->pdo->prepare($sql);
         $statement->bindValue(1, $id);
-        
-        return $statement->execute();
-    }
 
-    public function removeCapa(int $id): bool
-    {
-        $sql = "UPDATE videos SET image_path = null WHERE id = ?";
-        $statement = $this->pdo->prepare($sql);
-        $statement->bindValue(1, $id);
-        
         return $statement->execute();
     }
 
@@ -52,29 +44,32 @@ class VideoRepository
         if ($video->getFilePath() !== null) {
             $updateImageSql = ', image_path = :image_path';
         }
-        $sql = "UPDATE videos 
-                SET 
-                url = :url, 
-                title = :title
+        $sql = "UPDATE videos SET
+                  url = :url,
+                  title = :title
                 $updateImageSql
-                WHERE id = :id;";
+              WHERE id = :id;";
         $statement = $this->pdo->prepare($sql);
+
         $statement->bindValue(':url', $video->url);
         $statement->bindValue(':title', $video->title);
         $statement->bindValue(':id', $video->id, PDO::PARAM_INT);
+
         if ($video->getFilePath() !== null) {
             $statement->bindValue(':image_path', $video->getFilePath());
         }
-        
+
         return $statement->execute();
     }
 
+    /**
+     * @return Video[]
+     */
     public function all(): array
     {
         $videoList = $this->pdo
-        ->query("SELECT * FROM videos;")
-        ->fetchAll(PDO::FETCH_ASSOC);
-        
+            ->query('SELECT * FROM videos;')
+            ->fetchAll(\PDO::FETCH_ASSOC);
         return array_map(
             $this->hydrateVideo(...),
             $videoList
@@ -83,17 +78,18 @@ class VideoRepository
 
     public function find(int $id)
     {
-        $statement = $this->pdo->prepare("SELECT * FROM videos WHERE id = ?;");
-        $statement->bindValue(1, $id, PDO::PARAM_INT);
+        $statement = $this->pdo->prepare('SELECT * FROM videos WHERE id = ?;');
+        $statement->bindValue(1, $id, \PDO::PARAM_INT);
         $statement->execute();
 
-        return $this->hydrateVideo($statement->fetch(PDO::FETCH_ASSOC));
+        return $this->hydrateVideo($statement->fetch(\PDO::FETCH_ASSOC));
     }
 
     private function hydrateVideo(array $videoData): Video
     {
         $video = new Video($videoData['url'], $videoData['title']);
         $video->setId($videoData['id']);
+
         if ($videoData['image_path'] !== null) {
             $video->setFilePath($videoData['image_path']);
         }

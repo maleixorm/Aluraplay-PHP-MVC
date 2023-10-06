@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Alura\Mvc\Controller;
 
 use Psr\Http\Message\ResponseInterface;
